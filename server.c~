@@ -1,0 +1,42 @@
+#include<stdio.h>
+#include<unistd.h>
+#include<sys/msg.h>
+#include<math.h>
+
+struct msg_buffer
+{
+	long mtype; int i;
+}buf;
+
+int binary(int x)
+{
+	int r, i=0, p=0;
+
+	while(x>0)
+	{
+		r=x%2;
+		x=x/2;	
+		p= p + (pow(10,i)*r);
+		i++;
+	}
+	return p;
+}
+
+int main()
+{
+	key_t key;
+	int msqid;
+	key=ftok("/home/himank/Desktop/client.c",'b');
+	msqid=msgget(key, 0666);
+	printf("\nConnected to queue ");
+	msgrcv(msqid, &buf, sizeof(buf.i), 0, 0);
+	printf("\nReceived from queue ");
+	buf.mtype=2;
+	int a=binary(buf.i);
+	buf.i=a;
+	printf("\n%d", buf.i);
+	msgsnd(msqid, &buf, sizeof(buf.i), 0);
+	printf("\nSend to client ");
+	
+	return 0;
+}

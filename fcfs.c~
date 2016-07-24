@@ -1,0 +1,68 @@
+#include<stdio.h>
+
+int main()
+{
+    int size=20;
+    int sum, j, t0,t1,t2,i,n;
+    int at[size],wt[size],bt[size],tt[size],pid[size];
+    float avg_WT=0,avg_TT=0;   
+    printf("\n Enter total no of processes:\t");
+    scanf("%d",&n);
+    for(i=0;i<n;i++)
+    {
+        printf("\n Enter Following details for Process %d",i+1);
+        printf("\n Arrival Time :\t");
+        scanf("%d",&at[i]);
+        printf("\n Burst Time :\t");
+        scanf("%d",&bt[i]);
+        pid[i]=i;
+    }    
+
+    for(i=0;i<n;i++)
+    {
+        for(j=i+1;j<n;j++)
+        {
+            if(at[j]<at[i])
+            {
+                t0=at[j];
+                at[j]=at[i];
+                at[i]=t0;
+                t1=bt[j];
+                bt[j]=bt[i];
+                bt[i]=t1;
+                t2=pid[j];
+                pid[j]=pid[i];
+                pid[i]=t2;       
+            }
+        }
+    }
+
+    tt[0] =bt[0];
+    wt[0] = 0;
+    sum = bt[0];
+    for(i=1;i<n;i++)
+    {
+        wt[i]=sum-at[i];
+        tt[i]=wt[i] + bt[i];
+        sum+=bt[i];
+    }
+
+    printf("\n\nPID \t AT \t BT \t WT \t TT \n");
+    for(i=0;i<n;i++)
+    {
+        printf("\n%d \t %d \t %d \t %d \t %d\n\n",pid[i],at[i],bt[i],wt[i],tt[i]);
+    }
+
+    for(i=0;i<n;i++)
+    {
+        avg_WT+=wt[i];
+        avg_TT+=tt[i];
+    }
+    avg_WT=avg_WT/n;
+    avg_TT=avg_TT/n;            
+
+                printf("\nAverage Waiting Time  : %f",avg_WT);
+                printf("\nAverage Turnaround Time : %f",avg_TT);
+    
+    return 0;
+}

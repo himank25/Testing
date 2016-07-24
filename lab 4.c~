@@ -1,0 +1,56 @@
+#include<stdio.h>
+#include<unistd.h>
+
+int main()
+{
+	int toparent[2], tochild[2];
+	char buffer[50];
+
+	//pipe
+	pipe(toparent);
+	pipe(tochild);
+
+	pid_t pid ;
+	
+	//fork
+	pid = fork();
+
+	if(pid<0)
+	{
+		printf("FAILED TO FORK\n");
+	}
+
+	else if (pid==0)
+	{
+		//INSIDE CHIILD PROCESS	
+		
+		printf("Child Writing : \n");
+		write(toparent[1], "Find sum of 2 and 3", 20);
+
+		printf("Child Reading  :  \n");
+		read(tochild[0], buffer, 13);
+		printf("Message read by child is : %s\n", buffer);
+
+		printf("Child Writing(for Exit))  :  \n");
+		write(toparent[1], "Exit", 5);
+	}
+
+	else
+	{
+		//INSIDE PARENT PROCESS
+
+		printf("Parent Reading  :  \n");
+		read(toparent[0], buffer, 20);
+		printf("Message read by parent is : %s\n", buffer);
+
+		printf("Parent Writing  :  \n");
+		write(tochild[1], "The sum is 5", 13);
+
+		printf("Parent Reading  :  \n");
+		read(toparent[0], buffer, 5);
+		printf("Message read by parent is : %s\n", buffer);
+	}
+
+	return 0;
+
+}

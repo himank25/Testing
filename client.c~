@@ -1,0 +1,24 @@
+#include<stdio.h>
+#include<unistd.h>
+#include<sys/msg.h>
+
+struct msg_buffer
+{
+	long mtype; int i;
+}buf, pm;
+
+int main()
+{
+	key_t key;
+	pm.mtype=2;
+	pm.i=8;
+	int msqid;
+	key=ftok("/home/himank/Desktop/client.c", 'b');	
+	msqid=msgget(key, 0666|IPC_CREAT);
+	int size=sizeof(pm.i);
+	msgsnd(msqid, &pm, size, 0);
+	printf("\nDecimal is send to server ");
+	
+	msgrcv(msqid, &buf, sizeof(buf.i),0,0);
+	printf("\n The binary no. is %d\n", buf.i );
+	return 

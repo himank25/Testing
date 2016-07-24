@@ -1,0 +1,68 @@
+﻿#include<stdio.h> 
+#include<string.h> 
+
+
+int main() 
+{ 
+	int x=0; 
+
+	FILE *fptr; 
+	fptr=fopen("try.txt", "r"); 
+
+	int integers[10]; 
+
+	int num=0; 
+	int n=0; 
+	 
+	while(fscanf(fptr, "%d", &integers[num]) != EOF) 
+	{ 
+	         
+	        num++; 
+	} 
+
+	printf("\n\n  unsorted file is : \n\n"); 
+	 
+	for(x=0; x<num; x++) 
+		printf("%d  ", integers[x]); 
+	printf("\n\n"); 
+	 
+	int i=0,j=0,temp=0; 
+
+	for(i=0;i<num-1;i++) 
+		{ 
+		for(j=0;j<num-i;j++) 
+			{	 
+			if(integers[j]>integers[j+1])	 
+				{ 
+				temp = integers[j]; 
+				integers[j] = integers[j+1]; 
+				integers[j+1] = temp; 
+				} 
+			} 
+		} 
+
+	fclose(fptr); 
+	fptr=fopen("sort.txt", "w"); 
+	 
+	for(x=0;x<num;x++) 
+		fprintf(fptr, "%d ", integers[x]); 
+
+	printf("\n"); 
+	
+	
+	printf("\n\n  sorted file is : \n\n"); 
+	
+	while(fscanf(fptr, "%d ", &integers[num]) != EOF) 
+	{ 
+	       num++; 
+	} 
+ 
+	for(x=0; x<num; x++) 
+		printf("%d  ", integers[x]); 
+	printf("\n\n"); 
+	 
+	fclose(fptr); 
+  
+
+	return 0;
+}
